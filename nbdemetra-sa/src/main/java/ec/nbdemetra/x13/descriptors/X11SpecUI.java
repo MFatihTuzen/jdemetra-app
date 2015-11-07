@@ -6,6 +6,7 @@ package ec.nbdemetra.x13.descriptors;
 
 import ec.satoolkit.DecompositionMode;
 import ec.satoolkit.x11.CalendarSigma;
+import ec.satoolkit.x11.EndPointsTreatment;
 import ec.satoolkit.x11.SeasonalFilterOption;
 import ec.satoolkit.x11.SigmavecOption;
 import ec.satoolkit.x11.X11Exception;
@@ -45,10 +46,6 @@ public class X11SpecUI extends BaseX11SpecUI {
         if (desc != null) {
             descs.add(desc);
         }
-        desc = forecastDesc();
-        if (desc != null) {
-            descs.add(desc);
-        }
         desc = lsigmaDesc();
         if (desc != null) {
             descs.add(desc);
@@ -70,6 +67,14 @@ public class X11SpecUI extends BaseX11SpecUI {
             descs.add(desc);
         }
         desc = trendmaDesc();
+        if (desc != null) {
+            descs.add(desc);
+        }
+        desc = endpointsDesc();
+        if (desc != null) {
+            descs.add(desc);
+        }
+        desc = forecastDesc();
         if (desc != null) {
             descs.add(desc);
         }
@@ -199,6 +204,14 @@ public class X11SpecUI extends BaseX11SpecUI {
         }
     }
 
+    public EndPointsTreatment getEndPoints(){
+        return core.getEndpointsTreatment();
+    }
+    
+    public void setEndPoints(EndPointsTreatment ep){
+        core.setEndpointsTreatment(ep);
+    }
+
     public CalendarSigma getCalendarSigma() {
         return core.getCalendarSigma();
     }
@@ -231,7 +244,7 @@ public class X11SpecUI extends BaseX11SpecUI {
     }
 
     private static final int MODE_ID = 0, SEAS_ID = 1, FORECAST_ID = 2, LSIGMA_ID = 3, USIGMA_ID = 4, AUTOTREND_ID = 5,
-            TREND_ID = 6, SEASONMA_ID = 7, FULLSEASONMA_ID = 8, CALENDARSIGMA_ID = 9, SIGMAVEC_ID = 10;
+            TREND_ID = 6, SEASONMA_ID = 7, FULLSEASONMA_ID = 8, CALENDARSIGMA_ID = 9, SIGMAVEC_ID = 10, ENDPOINTS_ID=11;
 
     @Messages({
         "x11SpecUI.calendarsigmaDesc.name=Calendarsigma",
@@ -269,6 +282,24 @@ public class X11SpecUI extends BaseX11SpecUI {
             desc.setDisplayName(Bundle.x11SpecUI_sigmavecDesc_name());
             desc.setShortDescription(Bundle.x11SpecUI_sigmavecDesc_desc());
             edesc.setReadOnly(ro_ || freq_ == TsFrequency.Undefined);
+            return edesc;
+        } catch (IntrospectionException ex) {
+            return null;
+        }
+    }
+
+    @Messages({
+        "x11SpecUI.endpointsDesc.name=End points",
+        "x11SpecUI.endpointsDesc.desc=Specifies the treatment of the end points in the computation of the trend"
+    })
+    private EnhancedPropertyDescriptor endpointsDesc() {
+        try {
+            PropertyDescriptor desc = new PropertyDescriptor("EndPoints", this.getClass());
+            EnhancedPropertyDescriptor edesc = new EnhancedPropertyDescriptor(desc, ENDPOINTS_ID);
+            edesc.setRefreshMode(EnhancedPropertyDescriptor.Refresh.All);
+            desc.setDisplayName(Bundle.x11SpecUI_endpointsDesc_name());
+            desc.setShortDescription(Bundle.x11SpecUI_endpointsDesc_desc());
+            edesc.setReadOnly(core.isAutoHenderson() || ro_);
             return edesc;
         } catch (IntrospectionException ex) {
             return null;
@@ -447,7 +478,9 @@ public class X11SpecUI extends BaseX11SpecUI {
         "x11SpecUI.trendmaDesc.desc=[trendma] Length of the henderson filter used in the estimation of the trend. Should be an odd number in the range [1, 101]."
     })
     private EnhancedPropertyDescriptor trendmaDesc() {
+        
         try {
+            
             PropertyDescriptor desc = new PropertyDescriptor("TrendMA", this.getClass());
             EnhancedPropertyDescriptor edesc = new EnhancedPropertyDescriptor(desc, TREND_ID);
             edesc.setReadOnly(core.isAutoHenderson() || ro_);

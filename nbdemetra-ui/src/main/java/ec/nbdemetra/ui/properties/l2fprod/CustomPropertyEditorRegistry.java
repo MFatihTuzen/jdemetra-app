@@ -5,6 +5,7 @@ import com.l2fprod.common.propertysheet.PropertyEditorRegistry;
 import ec.satoolkit.DecompositionMode;
 import ec.satoolkit.benchmarking.SaBenchmarkingSpec.Target;
 import ec.satoolkit.x11.CalendarSigma;
+import ec.satoolkit.x11.EndPointsTreatment;
 import ec.satoolkit.x11.SeasonalFilterOption;
 import ec.satoolkit.x11.SigmavecOption;
 import ec.tss.sa.output.CsvLayout;
@@ -70,6 +71,7 @@ public enum CustomPropertyEditorRegistry {
         registerEnumEditor(Method.class);
         registerEnumEditor(DecompositionMode.class);
         registerEnumEditor(CalendarSigma.class);
+        registerEnumEditor(EndPointsTreatment.class);
         registerEnumEditor(CsvLayout.class);
         registerEnumEditor(Target.class);
         registerEnumEditor(EasterSpec.Type.class);
