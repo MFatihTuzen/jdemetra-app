@@ -46,6 +46,10 @@ public class X11SpecUI extends BaseX11SpecUI {
         if (desc != null) {
             descs.add(desc);
         }
+        desc = forecastDesc();
+        if (desc != null) {
+            descs.add(desc);
+        }
         desc = lsigmaDesc();
         if (desc != null) {
             descs.add(desc);
@@ -71,10 +75,6 @@ public class X11SpecUI extends BaseX11SpecUI {
             descs.add(desc);
         }
         desc = endpointsDesc();
-        if (desc != null) {
-            descs.add(desc);
-        }
-        desc = forecastDesc();
         if (desc != null) {
             descs.add(desc);
         }
